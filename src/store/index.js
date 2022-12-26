@@ -22,8 +22,8 @@ const store = createStore({
     setTasks(state, tasks) {
       state.tasks = tasks
     },
-    addTasks(state, task) {
-      state.tasks.push(task)
+    setTask(state, task) {
+      state.tasks = state.tasks.map((t) => (t.id === task.id ? (t = task) : t))
     },
   },
   actions: {
@@ -55,11 +55,19 @@ const store = createStore({
       console.log('get')
       context.dispatch('getTasks')
     },
-    async updateTask(_, task) {
+    async updateTask(context, task) {
       await axios.put(
         `https://freelance-c308a-default-rtdb.firebaseio.com/tasks/${task.id}.json`,
         { ...task }
       )
+      context.dispatch('getTask', task.id)
+    },
+    async getTask(context, id) {
+      const { data } = await axios.get(
+        `https://freelance-c308a-default-rtdb.firebaseio.com/tasks/${id}.json`
+      )
+      context.commit('setTask', data)
+      console.log(data)
     },
   },
 })

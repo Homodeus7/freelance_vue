@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import AppStatus from '../components/AppStatus'
 
@@ -29,9 +29,12 @@ export default {
 
     const setStatus = (status) => {
       const updated = { ...task.value, status }
-      console.log(updated)
       store.dispatch('updateTask', updated)
     }
+
+    onMounted(() => {
+      store.dispatch('getTasks')
+    })
 
     return {
       task,

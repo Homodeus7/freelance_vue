@@ -14,6 +14,9 @@ const store = createStore({
     taskById(_, getters) {
       return (id) => getters.tasks.find((t) => t.id === id)
     },
+    activeTasksCount(state) {
+      return state.tasks.filter((t) => t.status === 'active').length
+    },
   },
   mutations: {
     setTasks(state, tasks) {
@@ -51,6 +54,12 @@ const store = createStore({
       )
       console.log('get')
       context.dispatch('getTasks')
+    },
+    async updateTask(_, task) {
+      await axios.put(
+        `https://freelance-c308a-default-rtdb.firebaseio.com/tasks/${task.id}.json`,
+        { ...task }
+      )
     },
   },
 })

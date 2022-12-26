@@ -1,13 +1,13 @@
 <template>
   <div class="card" v-if="task">
     <h2>{{ task.title }}</h2>
-    <p><strong>Статус</strong>: <AppStatus :type="'done'" /></p>
+    <p><strong>Статус</strong>: <AppStatus :type="task.status" /></p>
     <p><strong>Дэдлайн</strong>: {{ new Date(task.date).toLocaleDateString() }}</p>
     <p><strong>Описание</strong>: {{ task.description }}</p>
     <div>
-      <button class="btn">Взять в работу</button>
-      <button class="btn primary">Завершить</button>
-      <button class="btn danger">Отменить</button>
+      <button class="btn" @click="setStatus('pending')">Взять в работу</button>
+      <button class="btn primary" @click="setStatus('done')">Завершить</button>
+      <button class="btn danger" @click="setStatus('cancelled')">Отменить</button>
     </div>
   </div>
   <h3 class="text-white center" v-else>
@@ -25,11 +25,17 @@ export default {
   components: { AppStatus },
   setup(props) {
     const store = useStore()
-
     const task = computed(() => store.getters.taskById(props.id))
+
+    const setStatus = (status) => {
+      const updated = { ...task.value, status }
+      console.log(updated)
+      store.dispatch('updateTask', updated)
+    }
 
     return {
       task,
+      setStatus,
     }
   },
 }

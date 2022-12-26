@@ -38,7 +38,7 @@ export default {
     })
 
     const submit = () => {
-      store.dispatch('subTasks', task)
+      store.dispatch('submitTasks', task)
       router.push('/')
     }
 

@@ -11,6 +11,9 @@ const store = createStore({
     tasks(state) {
       return state.tasks
     },
+    taskById(_, getters) {
+      return (id) => getters.tasks.find((t) => t.id === id)
+    },
   },
   mutations: {
     setTasks(state, tasks) {
@@ -41,11 +44,13 @@ const store = createStore({
         console.log(err)
       }
     },
-    async subTasks(_, task) {
+    async submitTasks(context, task) {
       await axios.post(
         'https://freelance-c308a-default-rtdb.firebaseio.com/tasks.json',
         task
       )
+      console.log('get')
+      context.dispatch('getTasks')
     },
   },
 })

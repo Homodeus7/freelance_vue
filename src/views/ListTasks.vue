@@ -14,7 +14,7 @@
           </small>
         </strong>
       </p>
-      <button class="btn primary">Посмотреть</button>
+      <button class="btn primary" @click="open(task.id)">Посмотреть</button>
     </div>
   </div>
 </template>
@@ -23,10 +23,12 @@
 import AppStatus from '../components/AppStatus'
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
   setup() {
     const store = useStore()
+    const router = useRouter()
 
     onMounted(() => {
       console.log('mount')
@@ -34,7 +36,12 @@ export default {
     })
 
     const tasks = computed(() => store.getters.tasks)
-    return { tasks }
+
+    const open = (id) => {
+      router.push(`/task/${id}`)
+    }
+
+    return { tasks, open }
   },
   components: { AppStatus },
 }
